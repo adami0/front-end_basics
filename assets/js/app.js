@@ -1,14 +1,10 @@
 (function app() {
 
-    let nb;
+    let nb, res, wrap, btn;
 
     //to identify elements of the DOM
     function identifyElements() {
-        let btn = document.getElementById("#btn");
-        let res = document.getElementById("#res");
-        let wrap = document.getElementById("wrap");
-        clickableElements = wrap.querySelectorAll("*");
-        console.log(clickableElements);
+        wrap = document.getElementById("wrap");
     }
 
     //to count number of dom elements
@@ -19,39 +15,48 @@
 
     //to display nb variable in the #res elment
     function displayNbInRes() {
+        res = document.getElementById("res");
         res.textContent = nb;
     }
 
     //to associate click on #btn to the function countDomElements
     function associateBtnToCount() {
+        btn = document.getElementById("btn");
         btn.addEventListener("click", countDomElements);
     }
 
     //to display prompt
     function displayPrompt(e) {
+        e.cancelBubble = true;
         let elementToBeRemoved = e.srcElement;
-        console.log(e.srcElement.outerHTML);
-        var result = prompt("saisissez y afin de supprimer l'élément " + elementToBeRemoved.outerHTML);
+        console.log(e);
+        let result = prompt("saisissez y afin de supprimer l'élément " + elementToBeRemoved.outerHTML);
         if (result === "y") {
             console.log("y");
             elementToBeRemoved.parentNode.removeChild(elementToBeRemoved);
+            associateElementsToPrompt();
         } else {
             console.log("n");
         }
     }
 
+
     //to associate click on elements to a prompt display
     function associateElementsToPrompt() {
-        for (let i = 0; i<clickableElements.length; i++) {
+        let clickableElements = wrap.getElementsByTagName("*");
+        console.log(clickableElements);
+        for (let i = 0; i<clickableElements.length-1; i++) {
             if (clickableElements[i].childElementCount === 0) {
                 clickableElements[i].addEventListener("click", displayPrompt);
             }
         }
     }
 
+
     window.addEventListener("DOMContentLoaded", function () {
         identifyElements();
         associateBtnToCount();
         associateElementsToPrompt();
     })
+
 })();
